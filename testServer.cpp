@@ -29,6 +29,7 @@ int main(int argc, char const *argv[]) {
     multi_buffer buffer;
     ws.read(buffer);
     std::string msg = buffers_to_string(buffer.data());
+    msg.erase(std::remove(msg.begin(),msg.end(),'\n'), msg.end());
     std::cout << msg << '\n';
   }
   return 0;
