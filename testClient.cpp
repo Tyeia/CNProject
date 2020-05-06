@@ -8,7 +8,7 @@ using namespace boost::beast::websocket;
 
 int main(int argc, char const *argv[]) {
   net::io_context ioc;
-  std::string host = "71.213.21.10";
+  std::string host = "localhost";
   stream<net::ip::tcp::socket> ws(ioc);
   net::ip::tcp::resolver resolver(ioc);
   auto const resolved = resolver.resolve(host, "80");
@@ -18,9 +18,11 @@ int main(int argc, char const *argv[]) {
   ws.handshake(host, "/");
   std::cout << "Connected." << '\n';
   std::string msg;
-  while(msg != "!quit~")
+  ws.text(true);
+  while(msg != "!quit~\n")
   {
     std::cin >> msg;
+    msg += "\n";
     ws.write(net::buffer(msg));
   }
   ws.close(close_code::normal);
