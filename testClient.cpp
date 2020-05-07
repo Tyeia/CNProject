@@ -18,14 +18,26 @@ int main(int argc, char const *argv[]) {
     // Connect the socket to the IP address returned from performing a name lookup
     net::connect(ws.next_layer(), resolved.begin(), resolved.end());
 
+    std::string name;
+    std::cout << "State your name: ";
+    std::cin >> name;
+    bool flag = false;
     ws.handshake(host, "/");
     std::cout << "Connected." << '\n';
     std::string msg;
     ws.text(true);
     while(msg != "!quit~")
     {
-      std::cin >> msg;
-      ws.write(net::buffer(msg));
+      if(flag)
+      {
+        std::cout << "[" << name << "]: ";
+      }
+      std::getline(std::cin,msg);
+      if(flag)
+      {
+        ws.write(net::buffer("["+name+"]: "+msg));
+      }
+      flag=true;
     }
     ws.close(close_code::normal);
   }

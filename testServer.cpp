@@ -29,20 +29,16 @@ int main(int argc, char const *argv[]) {
       ws.accept();
       std::cout << "Handshake complete." << '\n';
       multi_buffer buffer;
-      while(buffers_to_string(buffer.data())!= "!quit~")
+      while(buffers_to_string(buffer.data()).find("!quit~") == std::string::npos)
       {
         std::string msg;
+        std::stringstream msg_buffer;
         multi_buffer reset;
         buffer=reset;
         ws.read(buffer);
         ws.text(ws.got_text());
-        msg = buffers_to_string(buffer.data());
-        while(!ws.is_message_done())
-        {
-          std::cout << msg << ' ';
-          ws.read(buffer);
-          msg = buffers_to_string(buffer.data());
-        }
+        msg_buffer << buffers_to_string(buffer.data());
+        msg = msg_buffer.str();
         std::cout << msg << "\n";
       }
     }
