@@ -1,0 +1,1 @@
+g++ testClient.cpp -lwsock32 -lws2_32 -lmswsock -o testClient.exe
