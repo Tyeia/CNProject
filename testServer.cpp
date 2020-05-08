@@ -28,7 +28,7 @@ void* socketServer(void*)
     std::cout << "Endpoint Bound." << '\n';
     while(true)
     {
-      acceptor.listen();
+      acceptor.listen(net::socket_base::max_listen_connections);
       std::cout << "Listening..." << '\n';
       // The socket returned by accept() will be forwarded to the tcp_stream,
       // which uses it to perform a move-construction from the net::ip::tcp::socket.
