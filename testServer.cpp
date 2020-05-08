@@ -3,10 +3,15 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <iostream>
+#include <stack>
 namespace net = boost::asio;
 namespace beast = boost::beast;
 using namespace boost::beast;
 using namespace boost::beast::websocket;
+
+int clientNum;
+std::stack<int> messageStack;
+int activeClients = 0;
 
 void* socketServer(void*)
 {
@@ -33,6 +38,7 @@ void* socketServer(void*)
       // The stream must already be connected to the peer.
       ws.next_layer().handshake(net::ssl::stream_base::server);
       ws.accept();
+      activeClients++;
       std::cout << "Handshake complete." << '\n';
       multi_buffer buffer;
       while(buffers_to_string(buffer.data()).find("!quit~") == std::string::npos)
@@ -45,7 +51,25 @@ void* socketServer(void*)
         ws.text(ws.got_text());
         msg_buffer << buffers_to_string(buffer.data());
         msg = msg_buffer.str();
-        std::cout << msg << "\n";
+        if(msg != "!quit~")
+        {
+          std::cout << msg << "\n";
+          for(int i = 0; i<activeClients; i++)
+          {
+            messageStack.push(i);
+          }
+          if(messageStack.size()==activeClients)
+          {
+            messageStack.pop();
+            while(!messageStack.empty());
+          }
+          else
+          {
+            ws.write(net::buffer(msg));
+            messageStack.pop();
+            while(!messageStack.empty());
+          }
+        }
       }
     }
   }
@@ -62,10 +86,11 @@ void* socketServer(void*)
       std::cin >> nothing;
     }
   }
+  activeClients--;
 }
 
 int main(int argc, char const *argv[]) {
-  int clientNum;
+  std::cout << "How many clients?: ";
   std::cin >> clientNum;
   pthread_t clients[clientNum];
   for(int i = 0; i<clientNum;i++)
