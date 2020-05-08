@@ -17,7 +17,7 @@ int main(int argc, char const *argv[]) {
     ctx.set_default_verify_paths();
     ctx.use_certificate_file("CNProjectNewCert.pem", net::ssl::context::pem);
     ctx.use_rsa_private_key_file("CNProject.pem",net::ssl::context::pem);
-    std::string host = "localhost";
+    std::string host = "71.213.21.10";
     stream<net::ssl::stream<net::ip::tcp::socket>> ws(ioc, ctx);
     net::ip::tcp::resolver resolver(ioc);
     auto const resolved = resolver.resolve(host, "80");
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[]) {
     ws.next_layer().handshake(net::ssl::stream_base::client);
     ws.handshake(host, "/");
     std::cout << "Connected." << '\n';
-    std::string msg;
+    std::string msg = " has joined";
     ws.text(true);
     while(msg != "!quit~")
     {
@@ -39,10 +39,19 @@ int main(int argc, char const *argv[]) {
       {
         std::cout << "[" << name << "]: ";
       }
+      else
+      {
+        std::cout << name << " has joined.\n";
+      }
       std::getline(std::cin,msg);
       if(flag)
       {
         ws.write(net::buffer("["+name+"]: "+msg));
+      }
+      else
+      {
+        msg = " has joined.";
+        ws.write(net::buffer(name+msg));
       }
       flag=true;
     }
