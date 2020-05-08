@@ -44,6 +44,11 @@ int main(int argc, char const *argv[]) {
       {
         ws.write(net::buffer("["+name+"]: "+msg));
       }
+      else
+      {
+        msg = " has entered the chat.";
+        ws.write(net::buffer(name+msg));
+      }
       flag=true;
     }
     ws.close(close_code::normal);
