@@ -93,7 +93,7 @@ int main(int argc, char const *argv[]) {
   std::cout << "How many clients?: ";
   std::cin >> clientNum;
   pthread_t clients[clientNum];
-  net::io_context ioc{clientNum}
+  net::io_context ioc{clientNum};
   for(int i = 0; i<clientNum;i++)
   {
     ioc.run();
