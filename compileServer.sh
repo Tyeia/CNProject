@@ -1,2 +1,2 @@
-g++ testServer.cpp -o testServer.out -I mnt/c/Users/Tyeia/Desktop/Things/OpenSSL/include -I mnt/c/Users/Tyeia/Desktop/Things/rockstuff/boost -L /mnt/c/Users/Tyeia/Desktop/Things/OpenSSL/lib  -llibssl -llibcrypto -pthread
+g++ testServer.cpp -I ./boost_1_73_0 -I /usr/local/ssl -pthread -lssl -lcrypto -o  testServer.out
 chmod +x compileServer.sh
