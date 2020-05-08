@@ -1,1 +1,1 @@
-g++ testClient.cpp -lwsock32 -lws2_32 -lmswsock -o testClient.exe
+g++ testClient.cpp  -o testClient.exe -I C:/Users/Tyeia/Desktop/Things/OpenSSL/include -I C:/Users/Tyeia/Desktop/Things/"rock stuff"/boost -L C:/Users/Tyeia/Desktop/Things/OpenSSL/lib -lwsock32 -lws2_32 -lmswsock -llibssl -llibcrypto
