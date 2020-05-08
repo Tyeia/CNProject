@@ -28,18 +28,20 @@ int main(int argc, char const *argv[]) {
     while(true)
     {
       acceptor1.listen();
+      std::cout << "Listening..." << '\n';
+      stream<net::ssl::stream<net::ip::tcp::socket>> ws1(acceptor1.accept(),ctx);
+      ws1.next_layer().handshake(net::ssl::stream_base::server);
+      ws1.accept();
+      std::cout << "Handshake complete." << '\n';
       acceptor2.listen();
       std::cout << "Listening..." << '\n';
       // The socket returned by accept() will be forwarded to the tcp_stream,
       // which uses it to perform a move-construction from the net::ip::tcp::socket.
 
-      stream<net::ssl::stream<net::ip::tcp::socket>> ws1(acceptor1.accept(),ctx);
       stream<net::ssl::stream<net::ip::tcp::socket>> ws2(acceptor2.accept(),ctx);
       // Perform the websocket handshake in the server role.
       // The stream must already be connected to the peer.
-      ws1.next_layer().handshake(net::ssl::stream_base::server);
       ws2.next_layer().handshake(net::ssl::stream_base::server);
-      ws1.accept();
       ws2.accept();
       std::cout << "Handshake complete." << '\n';
       multi_buffer buffer;
