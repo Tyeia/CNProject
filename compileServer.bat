@@ -1,1 +1,1 @@
-g++ testServer.cpp -lwsock32 -lws2_32 -lmswsock -o testServer.exe
+g++ testServer.cpp  -o testServer.exe -I C:/Users/Tyeia/Desktop/Things/OpenSSL/include -I C:/Users/Tyeia/Desktop/Things/"rock stuff"/boost -L C:/Users/Tyeia/Desktop/Things/OpenSSL/lib -lwsock32 -lws2_32 -lmswsock -llibssl -llibcrypto
