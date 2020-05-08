@@ -22,7 +22,6 @@ void* socketServer(void*)
     ctx.use_certificate_file("CNProjectNewCert.pem", net::ssl::context::pem);
     ctx.use_rsa_private_key_file("CNProject.pem",net::ssl::context::pem);
     net::ip::tcp::acceptor acceptor(ioc);
-    acceptor.set_option(net::socket_base::reuse_address(true));
     net::ip::tcp::endpoint endpoint(net::ip::tcp::v4(), 80);
     acceptor.open(endpoint.protocol());
     acceptor.bind(endpoint);
@@ -33,7 +32,7 @@ void* socketServer(void*)
       std::cout << "Listening..." << '\n';
       // The socket returned by accept() will be forwarded to the tcp_stream,
       // which uses it to perform a move-construction from the net::ip::tcp::socket.
-
+      acceptor.set_option(net::socket_base::reuse_address(true));
       stream<net::ssl::stream<net::ip::tcp::socket>> ws(acceptor.accept(),ctx);
       // Perform the websocket handshake in the server role.
       // The stream must already be connected to the peer.
