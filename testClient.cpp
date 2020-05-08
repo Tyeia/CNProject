@@ -57,7 +57,7 @@ int main(int argc, char const *argv[]) {
     else
     {
       int nothing;
-      std::cout << ec << '\n';
+      std::cout << ec.message() << '\n';
       std::cin >> nothing;
     }
   }

@@ -8,7 +8,8 @@ namespace beast = boost::beast;
 using namespace boost::beast;
 using namespace boost::beast::websocket;
 
-int main(int argc, char const *argv[]) {
+void* socketServer(void*)
+{
   try
   {
     net::io_context ioc;
@@ -57,9 +58,20 @@ int main(int argc, char const *argv[]) {
     else
     {
       int nothing;
-      std::cout << ec << '\n';
+      std::cout << ec.message() << '\n';
       std::cin >> nothing;
     }
+  }
+}
+
+int main(int argc, char const *argv[]) {
+  int clientNum;
+  std::cin >> clientNum;
+  pthread_t clients[clientNum];
+  for(int i = 0; i<clientNum;i++)
+  {
+    pthread_create(&clients[i],NULL,&socketServer,NULL);
+    pthread_join(clients[i],NULL);
   }
   return 0;
 }
