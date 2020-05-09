@@ -11,15 +11,21 @@ using namespace boost::beast::websocket;
 int main(int argc, char const *argv[]) {
   try
   {
-    net::io_context ioc;
+    net::io_context ioc; //i_o context required for all I/O
+
+    //set up SSL
     net::ssl::context ctx(net::ssl::context::tlsv12);
     ctx.use_certificate_file("CNProjectNewCert.pem", net::ssl::context::pem);
     ctx.use_rsa_private_key_file("CNProject.pem",net::ssl::context::pem);
+    
+    //set up server with IP connection
     net::ip::tcp::acceptor acceptor(ioc);
-    net::ip::tcp::endpoint endpoint(net::ip::tcp::v4(), 80);
+    net::ip::tcp::endpoint endpoint(net::ip::tcp::v4(), 80); //get IP address of device for server
     acceptor.open(endpoint.protocol());
     acceptor.bind(endpoint);
     std::cout << "Endpoint Bound." << '\n';
+
+    //Check for messages loop
     while(true)
     {
       acceptor.listen();
@@ -34,9 +40,10 @@ int main(int argc, char const *argv[]) {
       ws.accept();
       std::cout << "Handshake complete." << '\n';
       multi_buffer buffer;
+
       while(buffers_to_string(buffer.data()).find("!quit~") == std::string::npos)
       {
-        std::string msg;
+        std::string msg; 
         std::stringstream msg_buffer;
         multi_buffer reset;
         buffer=reset;
