@@ -17,7 +17,7 @@ int main(int argc, char const *argv[]) {
     ctx.set_default_verify_paths();
     ctx.use_certificate_file("CNProjectNewCert.pem", net::ssl::context::pem);
     ctx.use_rsa_private_key_file("CNProject.pem",net::ssl::context::pem);
-    std::string host = "localhost";
+    std::string host = "71.213.21.10";
     stream<net::ssl::stream<net::ip::tcp::socket>> ws(ioc, ctx);
     net::ip::tcp::resolver resolver(ioc);
     auto const resolved = resolver.resolve(host, "80");
